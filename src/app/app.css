@@ -26,12 +26,16 @@
   font-size: 1.4rem;
   font-weight: 800;
   letter-spacing: -0.02em;
+  background: var(--primary-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .counter {
   font-variant-numeric: tabular-nums;
   font-size: 0.95rem;
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .link {
@@ -40,8 +44,8 @@
   padding: 0;
   font: inherit;
   font-size: 0.95rem;
-  font-weight: 600;
-  color: #2563eb;
+  font-weight: 700;
+  color: var(--accent-strong);
   cursor: pointer;
 }
 
@@ -50,13 +54,34 @@
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  margin-top: 12vh;
+  margin-top: 9vh;
+}
+
+.welcome {
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  background: var(--welcome-bg);
+  border: 1px solid var(--welcome-border);
+}
+
+.welcome-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.welcome-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-muted);
 }
 
 .lead {
   margin: 0;
   font-size: 1.15rem;
-  color: #475569;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .chips {
@@ -69,19 +94,24 @@
   flex: 1 1 4rem;
   padding: 0.9rem 0.5rem;
   border-radius: 0.9rem;
-  border: 2px solid #cbd5e1;
-  background: transparent;
+  border: 2px solid var(--border);
+  background: var(--surface);
   font-size: 1.1rem;
   font-weight: 700;
-  color: inherit;
+  color: var(--text);
   cursor: pointer;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  transition: transform 0.05s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chip:active {
+  transform: scale(0.96);
 }
 
 .chip.active {
-  border-color: #2563eb;
-  background: #2563eb;
-  color: #f8fafc;
+  border-color: transparent;
+  background: var(--primary-grad);
+  color: var(--on-accent);
+  box-shadow: var(--glow-accent);
 }
 
 .custom {
@@ -89,22 +119,23 @@
   flex-direction: column;
   gap: 0.4rem;
   font-size: 0.9rem;
-  color: #475569;
+  color: var(--text-muted);
 }
 
 .custom input {
   padding: 0.8rem 0.9rem;
   border-radius: 0.8rem;
-  border: 2px solid #cbd5e1;
-  background: transparent;
+  border: 2px solid var(--border);
+  background: var(--surface);
   font-size: 1.1rem;
   font-weight: 600;
-  color: inherit;
+  color: var(--text);
 }
 
 .custom input:focus-visible {
   outline: none;
-  border-color: #2563eb;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.18);
 }
 
 /* --- Controls --- */
@@ -120,10 +151,11 @@
   border-radius: 0.9rem;
   border: 1px solid transparent;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.05s ease, background 0.15s ease, opacity 0.15s ease;
+  transition: transform 0.05s ease, box-shadow 0.15s ease, filter 0.15s ease, opacity 0.15s ease;
   -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .btn:active {
@@ -131,19 +163,30 @@
 }
 
 .btn:disabled {
-  opacity: 0.4;
+  opacity: 0.45;
   cursor: default;
+  box-shadow: none;
 }
 
 .btn.primary {
   flex: 1.4;
-  background: #2563eb;
-  color: #f8fafc;
+  background: var(--primary-grad);
+  color: var(--on-accent);
+  box-shadow: var(--glow-accent);
+  letter-spacing: 0.01em;
+}
+
+.btn.primary:not(:disabled):hover {
+  background: var(--primary-grad-hover);
 }
 
 .btn.ghost {
-  background: #e2e8f0;
-  color: #0f172a;
+  background: var(--ghost-bg);
+  color: var(--ghost-text);
+}
+
+.btn.ghost:not(:disabled):active {
+  background: var(--ghost-bg-active);
 }
 
 .start {
@@ -153,35 +196,22 @@
   font-size: 1.05rem;
 }
 
+.finish {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.finish .btn.primary {
+  flex: none;
+}
+
 .status {
   text-align: center;
-  color: #475569;
+  color: var(--text-muted);
   font-size: 1rem;
 }
 
 .status.error {
-  color: #b91c1c;
-}
-
-@media (prefers-color-scheme: dark) {
-  .counter {
-    color: #94a3b8;
-  }
-  .lead,
-  .custom {
-    color: #cbd5e1;
-  }
-  .chip {
-    border-color: #334155;
-  }
-  .btn.ghost {
-    background: #1e293b;
-    color: #e2e8f0;
-  }
-  .status {
-    color: #cbd5e1;
-  }
-  .status.error {
-    color: #fca5a5;
-  }
+  color: var(--error);
 }

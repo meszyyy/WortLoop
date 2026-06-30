@@ -2,6 +2,17 @@
   @if (mode() === 'setup') {
     <section class="setup">
       <h1 class="brand">WortLoop</h1>
+
+      @if (showWelcome()) {
+        <div class="welcome">
+          <p class="welcome-title">Üdv a WortLoopban! 👋</p>
+          <p class="welcome-text">
+            Tanulj német kifejezéseket magyar fordítással. Válaszd ki, hány kártyával szeretnél
+            gyakorolni, koppints a kártyára a fordításért, és lapozz a következőre.
+          </p>
+        </div>
+      }
+
       <p class="lead">Hány kártyával szeretnél gyakorolni?</p>
 
       <div class="chips">
@@ -61,7 +72,16 @@
       </div>
 
       @if (isLast()) {
-        <p class="status">Ez volt az utolsó kártya. 🎉</p>
+        <div class="finish">
+          <p class="status">Ez volt az utolsó kártya. 🎉</p>
+          <button type="button" class="btn primary" (click)="start()" [disabled]="loading()">
+            {{ loading() ? 'Töltés…' : 'Folytatás – új ' + selectedCount() + ' kártya' }}
+          </button>
+        </div>
+      }
+
+      @if (error()) {
+        <p class="status error">{{ error() }}</p>
       }
     }
   }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { CardComponent } from './card/card';
 import { CardService } from './card.service';
 import { Card } from './card.model';
@@ -14,9 +14,10 @@ const MAX_COUNT = 100;
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
-export class App implements OnInit {
+export class App {
   private readonly service = inject(CardService);
 
+  // The app always opens on the count picker — it never resumes a previous deck.
   protected readonly mode = signal<Mode>('setup');
   protected readonly deck = signal<Card[]>([]);
   protected readonly index = signal(0);
@@ -27,21 +28,15 @@ export class App implements OnInit {
   protected readonly presets = [10, 20, 30, 50];
   protected readonly selectedCount = signal(20);
 
+  // Greeting shown on the picker until the user starts their first deck this session.
+  protected readonly showWelcome = signal(true);
+
   protected readonly current = computed<Card | null>(() => this.deck()[this.index()] ?? null);
   protected readonly position = computed(() => {
     const total = this.deck().length;
     return total ? `${this.index() + 1} / ${total}` : '';
   });
   protected readonly isLast = computed(() => this.index() >= this.deck().length - 1);
-
-  ngOnInit(): void {
-    const cached = this.service.loadCachedDeck();
-    if (cached.length) {
-      this.deck.set(cached);
-      this.index.set(Math.min(this.service.loadIndex(), cached.length - 1));
-      this.mode.set('study');
-    }
-  }
 
   protected pick(count: number): void {
     this.selectedCount.set(count);
@@ -54,6 +49,7 @@ export class App implements OnInit {
     }
   }
 
+  /** Fetch a fresh random deck of `selectedCount` cards. Used to start and to continue. */
   protected start(): void {
     if (this.loading()) return;
     this.loading.set(true);
@@ -69,8 +65,7 @@ export class App implements OnInit {
         this.deck.set(cards);
         this.index.set(0);
         this.flipped.set(false);
-        this.service.saveDeck(cards);
-        this.service.saveIndex(0);
+        this.showWelcome.set(false);
         this.mode.set('study');
       },
       error: () => {
@@ -88,19 +83,16 @@ export class App implements OnInit {
     if (this.index() === 0) return;
     this.flipped.set(false);
     this.index.update((i) => i - 1);
-    this.service.saveIndex(this.index());
   }
 
   protected next(): void {
     if (this.isLast()) return;
     this.flipped.set(false);
     this.index.update((i) => i + 1);
-    this.service.saveIndex(this.index());
   }
 
-  /** Discard the current deck and return to the count picker. */
+  /** Return to the count picker. */
   protected restart(): void {
-    this.service.clear();
     this.deck.set([]);
     this.index.set(0);
     this.flipped.set(false);

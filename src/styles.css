@@ -1,5 +1,39 @@
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+
+  /* Dark surfaces & text */
+  --bg: #0b0f0a;
+  --surface: #151b13;
+  --text: #ecf5e6;
+  --text-muted: #9bb39a;
+  --border: #283228;
+
+  /* Electric lime accent */
+  --accent: #a3e635;
+  --accent-strong: #bef264;
+  --primary-grad: linear-gradient(135deg, #bef264 0%, #84cc16 100%);
+  --primary-grad-hover: linear-gradient(135deg, #a3e635 0%, #65a30d 100%);
+  --on-accent: #14210a; /* near-black text on lime = neon contrast */
+
+  /* Soft secondary buttons */
+  --ghost-bg: #1d261b;
+  --ghost-bg-active: #28331f;
+  --ghost-text: #d9f99d;
+
+  /* Flip card: dark front, lime back */
+  --card-front: linear-gradient(160deg, #1a2419 0%, #0c120b 100%);
+  --card-front-text: #ecfccb;
+  --card-back: linear-gradient(160deg, #a3e635 0%, #65a30d 100%);
+  --card-back-text: #14210a;
+
+  /* Banners & feedback */
+  --welcome-bg: #172115;
+  --welcome-border: #3f6212;
+  --error: #fca5a5;
+
+  /* Effects */
+  --shadow-card: 0 20px 45px rgba(0, 0, 0, 0.6);
+  --glow-accent: 0 10px 28px rgba(163, 230, 53, 0.4);
 }
 
 * {
@@ -15,14 +49,9 @@ body {
 
 body {
   font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  background: #f1f5f9;
-  color: #0f172a;
+  background: var(--bg);
+  color: var(--text);
   -webkit-font-smoothing: antialiased;
-}
-
-@media (prefers-color-scheme: dark) {
-  body {
-    background: #0b1120;
-    color: #e2e8f0;
-  }
+  /* Disable double-tap-to-zoom (and the tap delay) on fast taps. */
+  touch-action: manipulation;
 }

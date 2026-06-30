@@ -39,13 +39,13 @@ mirrors.
   every time" bug — an `s-maxage` cache served one identical deck for an hour).
 - **`scripts/dev-api.mjs`** — a plain Node `http` server that imports the *same* `_tatoeba.mjs`
   helper, so dev and prod share one source of truth. `proxy.conf.json` points `ng serve` at it.
-- **`src/app/card.service.ts`** — calls `/api/cards`, and is the sole owner of `localStorage`
-  (keys `wortloop.deck` + `wortloop.index`). It persists the current random deck and position so a
-  reload resumes the same set; `clear()` drops it when the user starts a new deck.
+- **`src/app/card.service.ts`** — a thin wrapper that calls `/api/cards?count=N` and returns the
+  card array. No persistence: the app always opens fresh on the count picker.
 - **`src/app/app.ts`** — two modes in one component: a `setup` view (pick how many cards) and a
   `study` view (flip card + prev/next). All UI state is in signals (mode, deck, index, flipped,
-  loading, error). `restart()` clears the deck and returns to setup. `src/app/card/` is a purely
-  presentational flip card.
+  loading, error); it always starts in `setup`. `start()` fetches a fresh `selectedCount` deck and
+  is reused both to begin and to continue from the last card; `restart()` returns to setup.
+  `src/app/card/` is a purely presentational flip card.
 
 ### Conventions that bite
 
