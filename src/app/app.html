@@ -1,0 +1,32 @@
+<main class="app">
+  <header class="topbar">
+    <h1 class="brand">WortLoop</h1>
+    <span class="counter">{{ position() }}</span>
+  </header>
+
+  @if (current(); as card) {
+    <app-card [card]="card" [flipped]="flipped()" (toggle)="flip()" />
+
+    <div class="controls">
+      <button type="button" class="btn ghost" (click)="prev()" [disabled]="index() === 0">
+        ‹ Előző
+      </button>
+      <button type="button" class="btn primary" (click)="flip()">
+        {{ flipped() ? 'Vissza' : 'Fordítás' }}
+      </button>
+      <button type="button" class="btn ghost" (click)="next()" [disabled]="loading()">
+        {{ loading() ? '…' : 'Következő ›' }}
+      </button>
+    </div>
+  } @else if (loading()) {
+    <p class="status">Kártyák betöltése…</p>
+  }
+
+  @if (message()) {
+    <p class="status error">{{ message() }}</p>
+  }
+
+  @if (!current() && !loading()) {
+    <button type="button" class="btn primary retry" (click)="loadMore()">Újrapróbálom</button>
+  }
+</main>

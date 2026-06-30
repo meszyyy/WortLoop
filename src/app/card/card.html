@@ -1,0 +1,19 @@
+<button
+  type="button"
+  class="card"
+  [class.flipped]="flipped()"
+  (click)="toggle.emit()"
+  [attr.aria-label]="flipped() ? 'Magyar fordítás, koppints a németért' : 'Német kifejezés, koppints a fordításért'"
+>
+  <div class="inner">
+    <div class="face front">
+      <span class="lang">DE</span>
+      <p class="text">{{ card().de }}</p>
+      <span class="hint">Koppints a fordításért</span>
+    </div>
+    <div class="face back">
+      <span class="lang">HU</span>
+      <p class="text">{{ card().hu }}</p>
+    </div>
+  </div>
+</button>
