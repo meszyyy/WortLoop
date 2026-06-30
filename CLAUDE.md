@@ -24,23 +24,28 @@ filter by name). There is no e2e setup and no separate lint step (Prettier is th
 
 ## Architecture
 
-Data flow: **Angular app → `/api/cards?page=N` → Vercel serverless fn → tatoeba.org api_v0**.
+Data flow: **Angular app → `/api/cards?count=N` → Vercel serverless fn → tatoeba.org api_v0**.
 
 The proxy is not optional: Tatoeba's `api_v0` blocks browser CORS, so the browser can never call it
 directly. Everything routes through our own function so we control caching and avoid third-party
 mirrors.
 
-- **`api/_tatoeba.mjs`** — the only place that talks to Tatoeba. `fetchCards(page)` hits the
-  `deu→hun` search endpoint and flattens Tatoeba's 2D `translations` array down to compact
-  `{ id, de, hu }` cards, dropping any sentence without a Hungarian translation.
-- **`api/cards.mjs`** — Vercel function wrapping `fetchCards`, adds edge `Cache-Control`.
+- **`api/_tatoeba.mjs`** — the only place that talks to Tatoeba. `fetchRandomCards(count)` hits the
+  `deu→hun` search endpoint with `sort=random` across random pages, dedups, shuffles, and returns
+  exactly `count` compact `{ id, de, hu }` cards (flattening Tatoeba's 2D `translations` array and
+  dropping any sentence without a Hungarian translation).
+- **`api/cards.mjs`** — Vercel function wrapping `fetchRandomCards`. Sends `Cache-Control: no-store`
+  on purpose: caching would defeat the per-request randomness (this was the original "same order
+  every time" bug — an `s-maxage` cache served one identical deck for an hour).
 - **`scripts/dev-api.mjs`** — a plain Node `http` server that imports the *same* `_tatoeba.mjs`
   helper, so dev and prod share one source of truth. `proxy.conf.json` points `ng serve` at it.
 - **`src/app/card.service.ts`** — calls `/api/cards`, and is the sole owner of `localStorage`
-  (keys `wortloop.deck` + `wortloop.page`). It merges/dedups fetched cards into the persisted deck
-  so previously seen cards stay browsable offline.
-- **`src/app/app.ts`** — the study view; holds all UI state in signals (deck, index, flipped,
-  loading, message) and the paging/error logic. `src/app/card/` is a purely presentational flip card.
+  (keys `wortloop.deck` + `wortloop.index`). It persists the current random deck and position so a
+  reload resumes the same set; `clear()` drops it when the user starts a new deck.
+- **`src/app/app.ts`** — two modes in one component: a `setup` view (pick how many cards) and a
+  `study` view (flip card + prev/next). All UI state is in signals (mode, deck, index, flipped,
+  loading, error). `restart()` clears the deck and returns to setup. `src/app/card/` is a purely
+  presentational flip card.
 
 ### Conventions that bite
 

@@ -2,7 +2,7 @@
 // the Vercel CLI. Angular's proxy.conf.json forwards /api here.
 
 import { createServer } from 'node:http';
-import { fetchCards } from '../api/_tatoeba.mjs';
+import { fetchRandomCards, MAX_COUNT } from '../api/_tatoeba.mjs';
 
 const PORT = Number(process.env.DEV_API_PORT) || 3001;
 
@@ -10,10 +10,13 @@ createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
 
   if (url.pathname === '/api/cards') {
-    const page = Math.max(1, Number.parseInt(url.searchParams.get('page'), 10) || 1);
+    const count = Math.min(
+      Math.max(Number.parseInt(url.searchParams.get('count'), 10) || 20, 1),
+      MAX_COUNT,
+    );
     try {
-      const cards = await fetchCards(page);
-      res.writeHead(200, { 'Content-Type': 'application/json' });
+      const cards = await fetchRandomCards(count);
+      res.writeHead(200, { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' });
       res.end(JSON.stringify(cards));
     } catch (err) {
       res.writeHead(502, { 'Content-Type': 'application/json' });
