@@ -1,0 +1,28 @@
+<svg width="1040" height="320" viewBox="0 0 1040 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="WortLoop">
+  <defs>
+    <linearGradient id="lime" x1="120" y1="80" x2="400" y2="440" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bef264"/>
+      <stop offset="1" stop-color="#84cc16"/>
+    </linearGradient>
+    <linearGradient id="tile" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1a2419"/>
+      <stop offset="1" stop-color="#0b0f0a"/>
+    </linearGradient>
+    <linearGradient id="limeText" x1="310" y1="120" x2="980" y2="240" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#bef264"/>
+      <stop offset="1" stop-color="#84cc16"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon mark (scaled 512 -> 240) -->
+  <g transform="translate(40,40) scale(0.46875)">
+    <rect x="0" y="0" width="512" height="512" rx="112" fill="url(#tile)"/>
+    <rect x="6" y="6" width="500" height="500" rx="106" fill="none" stroke="#a3e635" stroke-opacity="0.18" stroke-width="3"/>
+    <path d="M 353.5 116.8 A 170 170 0 1 1 158.5 116.8" fill="none" stroke="url(#lime)" stroke-width="26" stroke-linecap="round"/>
+    <path d="M 186.3 97.3 L 166.2 138.2 L 141.0 102.2 Z" fill="url(#lime)"/>
+    <polyline points="176,196 216,316 256,242 296,316 336,196" fill="none" stroke="url(#lime)" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="312" y="205" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif" font-size="132" font-weight="800" letter-spacing="-3" fill="url(#limeText)">WortLoop</text>
+</svg>
